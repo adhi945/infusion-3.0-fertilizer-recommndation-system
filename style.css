@@ -1,8 +1,8 @@
 /* style.css */
 
-/* Background */
+/* Animated light sky background */
 body {
-    background: linear-gradient(135deg, #d4fc79, #96e6a1);
+    background: linear-gradient(135deg, #caf0f8, #90e0ef);
     animation: backgroundMotion 10s infinite alternate;
 }
 
@@ -11,68 +11,67 @@ body {
     100% { background-position: 100% 50%; }
 }
 
-/* App-wide font */
+/* App-wide font and color */
 .stApp {
-    font-family: 'Verdana', sans-serif;
-    color: #2e7d32;
+    font-family: 'Poppins', sans-serif;
+    color: #023e8a;
 }
 
 /* Headings */
-h1, h2, h3, h4 {
-    color: #1b5e20;
-    font-weight: bold;
+h1, h2, h3, h4, h5 {
+    color: #0077b6;
 }
 
 /* Button */
 .stButton>button {
-    background-color: #4CAF50;
+    background-color: #0077b6;
     color: white;
-    border-radius: 12px;
-    padding: 10px 24px;
-    font-size: 18px;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-size: 17px;
     border: none;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s;
 }
 
 .stButton>button:hover {
-    background-color: #388e3c;
+    background-color: #0096c7;
 }
 
-/* Inputs */
+/* Input fields */
 input, .stTextInput>div>div>input, .stNumberInput>div>div>input {
-    background-color: #e8f5e9;
+    background-color: #e0f7fa;
     border-radius: 8px;
     font-size: 16px;
 }
 
-/* Dropdowns */
+/* Dropdown */
 .stSelectbox>div>div {
-    background-color: #e8f5e9;
+    background-color: #e0f7fa;
     border-radius: 8px;
 }
 
-/* Alerts */
+/* Alert boxes */
 .stAlert-success, .stAlert-info, .stAlert-warning, .stAlert-error {
     border-radius: 10px;
-    padding: 20px;
+    padding: 18px;
 }
 
 .stAlert-success {
-    background-color: #c8e6c9;
-    color: #1b5e20;
+    background-color: #ade8f4;
+    color: #0077b6;
 }
 
 .stAlert-info {
-    background-color: #dcedc8;
-    color: #33691e;
+    background-color: #d4f1f9;
+    color: #0096c7;
 }
 
 .stAlert-warning {
-    background-color: #fff9c4;
+    background-color: #ffeb99;
     color: #f57f17;
 }
 
 .stAlert-error {
-    background-color: #ffcdd2;
-    color: #c62828;
+    background-color: #ffb3b3;
+    color: #d00000;
 }
