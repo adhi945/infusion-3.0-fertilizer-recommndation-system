@@ -1,9 +1,9 @@
 /* style.css */
 
-/* Animated background */
+/* Background */
 body {
     background: linear-gradient(135deg, #d4fc79, #96e6a1);
-    animation: backgroundMotion 12s infinite alternate;
+    animation: backgroundMotion 10s infinite alternate;
 }
 
 @keyframes backgroundMotion {
@@ -11,13 +11,13 @@ body {
     100% { background-position: 100% 50%; }
 }
 
-/* Whole App */
+/* App-wide font */
 .stApp {
     font-family: 'Verdana', sans-serif;
     color: #2e7d32;
 }
 
-/* Title, Headers */
+/* Headings */
 h1, h2, h3, h4 {
     color: #1b5e20;
     font-weight: bold;
@@ -28,7 +28,7 @@ h1, h2, h3, h4 {
     background-color: #4CAF50;
     color: white;
     border-radius: 12px;
-    padding: 10px 20px;
+    padding: 10px 24px;
     font-size: 18px;
     border: none;
     transition: background-color 0.3s ease;
@@ -38,20 +38,25 @@ h1, h2, h3, h4 {
     background-color: #388e3c;
 }
 
-/* Input Fields */
+/* Inputs */
 input, .stTextInput>div>div>input, .stNumberInput>div>div>input {
-    background-color: #f1f8e9;
+    background-color: #e8f5e9;
     border-radius: 8px;
     font-size: 16px;
 }
 
-/* Selectbox */
+/* Dropdowns */
 .stSelectbox>div>div {
-    background-color: #f1f8e9;
+    background-color: #e8f5e9;
     border-radius: 8px;
 }
 
-/* Success/Info/Warning/Error Alerts */
+/* Alerts */
+.stAlert-success, .stAlert-info, .stAlert-warning, .stAlert-error {
+    border-radius: 10px;
+    padding: 20px;
+}
+
 .stAlert-success {
     background-color: #c8e6c9;
     color: #1b5e20;
