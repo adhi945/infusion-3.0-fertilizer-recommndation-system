@@ -1,6 +1,6 @@
 /* style.css */
 
-/* Animated light blue sky background */
+/* Light blue sky background */
 body {
     background: linear-gradient(135deg, #caf0f8, #90e0ef);
     animation: backgroundMotion 10s infinite alternate;
@@ -11,13 +11,12 @@ body {
     100% { background-position: 100% 50%; }
 }
 
-/* Font and color */
+/* App-wide styles */
 .stApp {
     font-family: 'Poppins', sans-serif;
     color: #023e8a;
 }
 
-/* Headings */
 h1, h2, h3, h4, h5 {
     color: #0077b6;
 }
@@ -37,7 +36,7 @@ h1, h2, h3, h4, h5 {
     background-color: #0096c7;
 }
 
-/* Inputs with BLACK text inside */
+/* Input fields - black text */
 input, .stTextInput>div>div>input, .stNumberInput>div>div>input {
     background-color: #e0f7fa;
     border-radius: 8px;
@@ -45,7 +44,7 @@ input, .stTextInput>div>div>input, .stNumberInput>div>div>input {
     color: black;
 }
 
-/* Dropdowns */
+/* Dropdown */
 .stSelectbox>div>div {
     background-color: #e0f7fa;
     border-radius: 8px;
