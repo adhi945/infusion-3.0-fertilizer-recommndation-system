@@ -27,14 +27,17 @@ def load_files():
 
 # Fetch weather data
 def fetch_weather_data(api_key, city):
-    url = f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric"
-    response = requests.get(url)
-    data = response.json()
-    if response.status_code == 200:
-        temperature = data['main']['temp']
-        humidity = data['main']['humidity']
-        return temperature, humidity
-    else:
+    try:
+        url = f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric"
+        response = requests.get(url)
+        data = response.json()
+        if response.status_code == 200:
+            temperature = data['main']['temp']
+            humidity = data['main']['humidity']
+            return temperature, humidity
+        else:
+            return None, None
+    except:
         return None, None
 
 # Remarks dictionary
@@ -59,33 +62,35 @@ remarks_dict = {
 def main():
     local_css("style.css")
 
-    st.title("🌾 Smart Fertilizer Recommendation System")
-    st.write("Get real-time fertilizer recommendations based on your location's weather!")
+    st.markdown("<h1 style='text-align: center;'>🌿 Smart Fertilizer Recommendation System 🌿</h1>", unsafe_allow_html=True)
+    st.markdown("<h4 style='text-align: center; color: green;'>Get real-time fertilizer recommendations based on your location's weather!</h4>", unsafe_allow_html=True)
+    st.write("")
 
     # Load models
     scaler, label_encoder, feature_encoders, model = load_files()
 
-    # Ask for API key and city
+    # Input API key and city
+    st.subheader("🌍 Weather Details")
     api_key = st.text_input("🔑 Enter your OpenWeatherMap API Key", type="password")
-    city = st.text_input("🏡 Enter Your City Name")
+    city = st.text_input("🏡 Enter Your City Name (e.g., Chennai, Mumbai, Delhi)")
 
+    st.subheader("🌾 Crop Selection")
     crop_type_input = st.selectbox('🌱 Select Crop Type', ['Wheat', 'Rice', 'Sugarcane', 'Maize', 'Cotton', 'Barley'])
 
-    if st.button('Fetch Weather and Recommend Fertilizer'):
+    if st.button('🚜 Fetch Weather and Recommend Fertilizer'):
         if city and api_key:
             temperature, humidity = fetch_weather_data(api_key, city)
 
             if temperature is not None:
-                moisture = humidity * 0.6  # estimate soil moisture
+                moisture = humidity * 0.6  # simple moisture estimation
                 soil_type = random.choice(['Loamy', 'Sandy', 'Clayey', 'Black', 'Red', 'Alluvial'])
 
-                st.success(f"📈 Live Data for {city}:")
-                st.write(f"🌡 Temperature: {temperature}°C")
-                st.write(f"💧 Humidity: {humidity}%")
-                st.write(f"🪴 Assumed Soil Type: {soil_type}")
-                st.write(f"🌊 Estimated Soil Moisture: {moisture:.2f}%")
+                st.success(f"📈 Live Weather for **{city.capitalize()}**:")
+                st.write(f"🌡 Temperature: **{temperature}°C**")
+                st.write(f"💧 Humidity: **{humidity}%**")
+                st.write(f"🪴 Assumed Soil Type: **{soil_type}**")
+                st.write(f"🌊 Estimated Soil Moisture: **{moisture:.2f}%**")
 
-                # Random NPK for now (could be inputted too)
                 nitrogen = random.randint(10, 80)
                 phosphorus = random.randint(10, 80)
                 potassium = random.randint(10, 80)
@@ -98,7 +103,7 @@ def main():
                     soil_encoded = random.randint(0, 5)
                     crop_encoded = random.randint(0, 5)
 
-                # Create input array
+                # Input array
                 input_data = np.array([[
                     temperature, humidity, moisture,
                     soil_encoded, crop_encoded,
@@ -108,10 +113,8 @@ def main():
                     random.uniform(50.0, 200.0)   # Elevation
                 ]])
 
-                # Scale
+                # Scale and Predict
                 input_scaled = scaler.transform(input_data)
-
-                # Predict
                 prediction_encoded = model.predict(input_scaled)
                 prediction = label_encoder.inverse_transform(prediction_encoded)[0]
 
@@ -122,9 +125,9 @@ def main():
                 st.info(f"💬 Remark: {remark}")
 
             else:
-                st.error("❌ Failed to fetch weather data. Please check your city name or API key.")
+                st.error("❌ Failed to fetch weather data. Please check your City name or API Key.")
         else:
-            st.warning("⚠️ Please enter your city and API key.")
+            st.warning("⚠️ Please enter both City and API key.")
 
 if __name__ == '__main__':
     main()
