@@ -5,7 +5,7 @@ import numpy as np
 import requests
 import random
 
-# Inject CSS from style.css
+# Inject CSS
 def local_css(file_name):
     with open(file_name) as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
@@ -37,55 +37,53 @@ def fetch_weather_data(api_key, city):
             return temperature, humidity
         else:
             return None, None
-    except:
+    except Exception as e:
         return None, None
 
-# Remarks dictionary
+# Fertilizer remarks
 remarks_dict = {
-    'Urea': 'High Nitrogen fertilizer, excellent for green leafy vegetables.',
-    'DAP': 'Rich in Phosphorus, ideal for root development and strong growth.',
-    '14-35-14': 'Boosts flowering and fruiting stages effectively.',
-    '28-28': 'Ensures balanced growth during vegetative phase.',
-    '17-17-17': 'General-purpose fertilizer for various crops and stages.',
-    '20-20': 'Great starter fertilizer for young plants and seedlings.',
-    '10-26-26': 'Promotes flowering, fruiting, and plant maturity.',
-    'General Purpose Fertilizer': 'Perfect for maintaining healthy plants throughout the season.',
-    'NPK 19-19-19': 'Balanced NPK fertilizer, supports vigorous plant growth.',
-    'Compost': 'Organic fertilizer enriching soil quality sustainably.',
-    'Vermicompost': 'Natural worm-processed fertilizer for soil health.',
-    'Cow Manure': 'Traditional organic fertilizer improving soil texture.',
-    'Potash': 'Boosts resistance to diseases and improves crop quality.',
-    'Superphosphate': 'Helps rapid root establishment and flowering.'
+    'Urea': 'High Nitrogen fertilizer, good for leafy growth.',
+    'DAP': 'High Phosphorus fertilizer, promotes root development.',
+    '14-35-14': 'Balanced fertilizer for flowering and fruiting.',
+    '28-28': 'Balanced fertilizer for overall growth.',
+    '17-17-17': 'General-purpose fertilizer for all crops.',
+    '20-20': 'Starter fertilizer for young plants.',
+    '10-26-26': 'High phosphorus and potassium for maturity.',
+    'General Purpose Fertilizer': 'Good for maintaining healthy plants.',
+    'NPK 19-19-19': 'Balanced nutrients for strong flowering.',
+    'Compost': 'Organic material for improving soil health.',
+    'Vermicompost': 'Natural worm-based fertilizer.',
+    'Cow Manure': 'Organic fertilizer improving soil structure.',
+    'Potash': 'Increases disease resistance and quality.',
+    'Superphosphate': 'Helps strong root development and flowering.'
 }
 
-# Main app
+# Main App
 def main():
     local_css("style.css")
 
-    st.markdown("<h1 style='text-align: center;'>🌿 Smart Fertilizer Recommendation System 🌿</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center;'>🌿 Smart Fertilizer Recommendation System</h1>", unsafe_allow_html=True)
     st.markdown("<h4 style='text-align: center; color: green;'>Get real-time fertilizer recommendations based on your location's weather!</h4>", unsafe_allow_html=True)
     st.write("")
 
-    # Load models
     scaler, label_encoder, feature_encoders, model = load_files()
 
-    # Input API key and city
-    st.subheader("🌍 Weather Details")
-    api_key = st.text_input("🔑 Enter your OpenWeatherMap API Key", type="password")
-    city = st.text_input("🏡 Enter Your City Name (e.g., Chennai, Mumbai, Delhi)")
+    st.subheader("🌍 Enter Location Details")
+    api_key = st.text_input("🔑 OpenWeatherMap API Key", type="password")
+    city = st.text_input("🏡 Enter City Name (Example: Chennai, Mumbai, Delhi)")
 
-    st.subheader("🌾 Crop Selection")
-    crop_type_input = st.selectbox('🌱 Select Crop Type', ['Wheat', 'Rice', 'Sugarcane', 'Maize', 'Cotton', 'Barley'])
+    st.subheader("🌾 Select Crop Type")
+    crop_type_input = st.selectbox('🌱 Crop Type', ['Wheat', 'Rice', 'Sugarcane', 'Maize', 'Cotton', 'Barley'])
 
     if st.button('🚜 Fetch Weather and Recommend Fertilizer'):
         if city and api_key:
             temperature, humidity = fetch_weather_data(api_key, city)
 
-            if temperature is not None:
-                moisture = humidity * 0.6  # simple moisture estimation
+            if temperature is not None and humidity is not None:
+                moisture = humidity * 0.6
                 soil_type = random.choice(['Loamy', 'Sandy', 'Clayey', 'Black', 'Red', 'Alluvial'])
 
-                st.success(f"📈 Live Weather for **{city.capitalize()}**:")
+                st.success(f"📈 Weather Details for **{city.capitalize()}**")
                 st.write(f"🌡 Temperature: **{temperature}°C**")
                 st.write(f"💧 Humidity: **{humidity}%**")
                 st.write(f"🪴 Assumed Soil Type: **{soil_type}**")
@@ -95,7 +93,6 @@ def main():
                 phosphorus = random.randint(10, 80)
                 potassium = random.randint(10, 80)
 
-                # Encode soil and crop
                 try:
                     soil_encoded = feature_encoders['Soil Type'].transform([soil_type])[0]
                     crop_encoded = feature_encoders['Crop Type'].transform([crop_type_input])[0]
@@ -103,31 +100,29 @@ def main():
                     soil_encoded = random.randint(0, 5)
                     crop_encoded = random.randint(0, 5)
 
-                # Input array
                 input_data = np.array([[
                     temperature, humidity, moisture,
                     soil_encoded, crop_encoded,
                     nitrogen, phosphorus, potassium,
-                    random.uniform(5.5, 7.5),    # pH
-                    random.uniform(100.0, 300.0), # Rainfall
-                    random.uniform(50.0, 200.0)   # Elevation
+                    random.uniform(5.5, 7.5),
+                    random.uniform(100.0, 300.0),
+                    random.uniform(50.0, 200.0)
                 ]])
 
-                # Scale and Predict
                 input_scaled = scaler.transform(input_data)
                 prediction_encoded = model.predict(input_scaled)
                 prediction = label_encoder.inverse_transform(prediction_encoded)[0]
 
-                # Remark
-                remark = remarks_dict.get(prediction, "🌿 Fertilizer recommended for promoting balanced plant growth.")
+                remark = remarks_dict.get(prediction, "🌿 Fertilizer recommended for balanced plant growth.")
 
                 st.success(f"🌱 Recommended Fertilizer: **{prediction}**")
                 st.info(f"💬 Remark: {remark}")
 
             else:
-                st.error("❌ Failed to fetch weather data. Please check your City name or API Key.")
+                st.error("❌ Could not fetch weather data. Please check your API Key or City Name.")
+
         else:
-            st.warning("⚠️ Please enter both City and API key.")
+            st.warning("⚠️ Please enter both City Name and API Key.")
 
 if __name__ == '__main__':
     main()
