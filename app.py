@@ -27,7 +27,7 @@ def load_files():
 
 # Fetch weather data
 def fetch_weather_data(city):
-    api_key = "d177b25afe56aae8ccf51dc3d5c9a315"  # <-- Your correct API Key
+    api_key = "d800146b93a2ecf2ba158377ed11d44a"  # <-- Your correct API Key
     try:
         url = f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric"
         response = requests.get(url)
